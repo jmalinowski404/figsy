@@ -1,7 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Slot, Stack, Tabs } from 'expo-router';
 import 'react-native-reanimated';
-
+import { StyleSheet } from 'react-native'
 import { createTamagui,TamaguiProvider, View } from 'tamagui'
 import { defaultConfig } from '@tamagui/config/v4'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -24,14 +24,14 @@ export default function TabLayout() {
         <Tabs.Screen
           name='index'
           options={{
-            tabBarIcon: () => <FontAwesome name="folder" size={24} color="#9a9a99" />,
+            tabBarIcon: ({ focused }) => <FontAwesome name="folder" size={24} color={focused ? "#cd4932" : "#9a9a99"} />,
             tabBarLabel: '',
           }}
         />
         <Tabs.Screen
           name='profile'
           options={{
-            tabBarIcon: () => <Ionicons name="person" size={24} color="#9a9a99" />,
+            tabBarIcon: ({ focused }) => <Ionicons name="person" size={24} color={focused ? "#cd4932" : "#9a9a99"} />,
             tabBarLabel: '',
           }}
         />
