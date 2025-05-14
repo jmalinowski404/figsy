@@ -1,17 +1,28 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context"
 import { StyleSheet, View } from 'react-native'
 import { Button, YStack } from 'tamagui'
-import { Image } from 'expo-image';
+import { Image } from 'expo-image'
+import { Link, router } from 'expo-router'
 import bkgImage from '@/assets/images/bkg.jpg'
+import { useEffect } from "react"
+import { supabase } from "@/utils/supabase"
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function LandingScreen() {
+    useEffect(() => {
+      const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN') {
+          router.replace('/(tabs)' as never);
+        }
+      });
 
-    function handleLogin() {
+      return () => authListener.subscription.unsubscribe();
+    }, []);
 
-    }
+    const goToLogin = () => router.push('/login')
+    const goToSignup = () => router.push('/signup')
 
     return (
         <SafeAreaView style={styles.container}>
@@ -24,10 +35,27 @@ export default function LandingScreen() {
             />
             <View style={styles.overlay} />
             <YStack style={styles.ystack}>
-                <Button color={'#FFFFFF'} size='$6' padding='$3' fontWeight='bold' style={styles.btnLog}>
+                <Button 
+                  onPress={goToLogin}
+                  color={'#FFFFFF'} 
+                  size='$6' 
+                  padding='$3' 
+                  fontWeight='bold' 
+                  style={styles.btnLog} 
+                  href="/login"
+                >
                     Sign in
                 </Button>
-                <Button color={'#060602'} size='$6' padding='$3' fontWeight='bold' style={styles.btnReg}>
+
+                <Button 
+                  onPress={goToSignup}
+                  color={'#060602'} 
+                  size='$6' 
+                  padding='$3' 
+                  fontWeight='bold' 
+                  style={styles.btnReg} 
+                  href="signup"
+                >
                     Create Account
                 </Button>
             </YStack>
