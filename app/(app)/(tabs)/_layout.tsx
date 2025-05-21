@@ -11,7 +11,7 @@ const config = createTamagui(defaultConfig)
 
 export default function TabLayout() {
   const [loaded] = useFonts({
-    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('../../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
   if (!loaded) {
