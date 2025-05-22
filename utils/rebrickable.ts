@@ -1,6 +1,6 @@
 import { supabase } from '@/utils/supabase'
 
-const REBRICKABLE_API_KEY = 'key_' + process.env.REBRICKABLE_API_KEY
+const REBRICKABLE_API_KEY = '7638f171ec8b95f97e6f321eb4a8b330'
 const REBRICKABLE_API_URL = 'https://rebrickable.com/api/v3/lego'
 
 interface Minifig {
@@ -15,8 +15,8 @@ interface Minifig {
 export const RebrickableService = {
     async searchMinifigs(
         query: string,
-        page: 1,
-        pageSize: 20
+        page: number = 1,
+        pageSize: number = 20
     ): Promise<{ results: Minifig[]; count: number }> {
         try {
             const { data: cachedResults, error: cacheError } = await supabase
@@ -33,17 +33,20 @@ export const RebrickableService = {
             }
 
             const response = await fetch(
-                `${REBRICKABLE_API_URL}/minifigs/?search=${encodeURIComponent(
-                    query
-                )}&page=${page}&page_size=${pageSize}`,
+                `${REBRICKABLE_API_URL}/minifigs/?search=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`, 
                 {
+                    method: 'GET',
                     headers: {
-                        Authorization: `key ${REBRICKABLE_API_KEY}`,
-                    }
+                    Authorization: `key ${REBRICKABLE_API_KEY}`,
+                    },
                 }
-            )
+            );
+
+            console.log('Status: ', response.status)
             
             if (!response.ok) {
+                const errorBody = await response.text()
+                console.error('Rebrickable API full response: ', response.status, errorBody)
                 throw new Error(`Rebrickable API error: ${response.statusText}`)
             }
 

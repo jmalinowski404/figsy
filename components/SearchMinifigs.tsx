@@ -20,11 +20,11 @@ export default function SearchMinifigs() {
     const { data: minifigs, isLoading, error } = useQuery({
         queryKey: ['search', debouncedQuery],
         queryFn: () => RebrickableService.searchMinifigs(debouncedQuery, 1, 20),
-        enabled: debouncedQuery.length > 2, 
+        enabled: debouncedQuery.length > 2,
     })
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1, }}>
             <View style={styles.container}>
                 <TextInput
                     style={styles.searchInput}
@@ -43,8 +43,9 @@ export default function SearchMinifigs() {
                 )}
 
                 <FlatList
-                    data={minifigs}
-                    keyExtractor={(item) => item.set_num}
+                    style={{ flex: 1, }}
+                    data={minifigs?.results || []}
+                    keyExtractor={(item, index) => item.set_num + index}
                     renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
                             <Image 
@@ -52,7 +53,7 @@ export default function SearchMinifigs() {
                                 style={styles.image}
                                 resizeMode='contain'
                             />
-                            <View>
+                            <View style={styles.textContainer }>
                                 <Text style={styles.name}>{item.name}</Text>
                                 <Text style={styles.details}>{item.num_parts}</Text>
                                 <Text style={styles.details}>{item.set_num}</Text>
@@ -73,7 +74,9 @@ export default function SearchMinifigs() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingTop: 0,
+    paddingBottom: 0,
+    padding: 16
   },
   searchInput: {
     height: 50,
@@ -85,6 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   itemContainer: {
+    flex: 1,
     flexDirection: 'row',
     padding: 12,
     marginBottom: 12,
